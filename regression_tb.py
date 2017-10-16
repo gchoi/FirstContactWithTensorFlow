@@ -12,11 +12,11 @@ with tf.name_scope('data'):
 
 with tf.name_scope('W'):
     W = tf.Variable(tf.random_uniform([], minval=-1.0, maxval=1.0))
-    tf.scalar_summary('function/W', W)
+    tf.summary.scalar('function/W', W)
 
 with tf.name_scope('b'):
     b = tf.Variable(tf.zeros([]))
-    tf.scalar_summary('function/b', b)
+    tf.summary.scalar('function/b', b)
 
 with tf.name_scope('function'):
     y_pred = W * x + b
@@ -24,18 +24,18 @@ with tf.name_scope('function'):
 
 with tf.name_scope('error'):
     loss = tf.reduce_mean(tf.square(y_pred - y_true))
-    tf.scalar_summary('error', loss)
+    tf.summary.scalar('error', loss)
 
 with tf.name_scope('train'):
     optimizer = tf.train.GradientDescentOptimizer(0.05)
     train = optimizer.minimize(loss)
 
-init = tf.initialize_all_variables()
+init = tf.global_variables_initializer()
 
 sess = tf.Session()
 
-merged = tf.merge_all_summaries()
-writer = tf.train.SummaryWriter('/tmp/regression/run1', sess.graph)
+merged = tf.summary.merge_all()
+writer = tf.summary.FileWriter('/tmp/regression/run1', sess.graph)
 
 sess.run(init)
 
