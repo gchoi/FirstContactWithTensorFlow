@@ -40,6 +40,16 @@ print( expanded_centroids.get_shape() )
 distances = tf.reduce_sum( tf.square( tf.subtract( expanded_vectors, expanded_centroids ) ), 2 )
 assignments = tf.argmin(distances, 0)
 
+### TEST
+c = 0
+tmp1 = tf.equal(assignments, c)
+tmp2 = tf.where(tmp1)
+tmp3 = tf.reshape(tmp2,[1,-1])
+tmp4 = tf.gather(vectors, tmp3)
+tmp5 = tf.reduce_mean(tmp4, reduction_indices=[1])
+means = tf.concat([tmp5 for c in range(num_clusters)], 0)
+###
+
 means = tf.concat([
   tf.reduce_mean(
       tf.gather(vectors, 
